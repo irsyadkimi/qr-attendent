@@ -12,6 +12,9 @@ class EventParticipant extends Model
 {
     use HasFactory, HasUuids;
 
+    public $incrementing = false;
+    protected $keyType = 'string';
+
     protected $fillable = [
         'event_id',
         'contact_id',
@@ -27,7 +30,6 @@ class EventParticipant extends Model
     {
         return $this->belongsTo(Event::class);
     }
-
 
     public function contact(): BelongsTo
     {
