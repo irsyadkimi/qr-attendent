@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: qr_attendance_app
+    restart: unless-stopped
+    working_dir: /var/www/html
+    volumes:
+      - ./app:/var/www/html
+      - ./php.ini:/usr/local/etc/php/conf.d/custom.ini
+    ports:
+      - "1102:80"
+    environment:
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_DATABASE=qr_attendance
+      - DB_USERNAME=qr_user
+      - DB_PASSWORD=qr_secure_pass_2024
+    depends_on:
+      - db
+    networks:
+      - qr_network
+
+  db:
+    image: postgres:15-alpine
+    container_name: qr_attendance_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: qr_attendance
+      POSTGRES_USER: qr_user
+      POSTGRES_PASSWORD: qr_secure_pass_2024
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    networks:
+      - qr_network
+
+volumes:
+  db_data:
+    driver: local
+
+networks:
+  qr_network:
+    driver: bridge
