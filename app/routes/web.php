@@ -10,6 +10,7 @@ Route::get('/', function () {
 Route::get('/e/{event_code}', [App\Http\Controllers\PublicEventController::class, 'show'])->name('event.show');
 Route::post('/e/{event_code}', [App\Http\Controllers\PublicEventController::class, 'store'])->name('event.checkin');
 Route::get('/e/{event_code}/success', [App\Http\Controllers\PublicEventController::class, 'success'])->name('event.success');
+Route::get('/api/check-phone', [App\Http\Controllers\PublicEventController::class, 'checkPhone'])->name('event.check-phone');
 
 // Autocomplete API for roster
 Route::get('/api/events/{event_code}/participants/search', function($event_code) {
@@ -43,16 +44,3 @@ Route::get('/guest/qr/download', function() {
     ]);
 })->name('guest.qr.download');
 
-// Download QR Code Buku Tamu
-Route::get('/guest/qr/download', function() {
-    $qrCode = \SimpleSoftwareIO\QrCode\Facades\QrCode::format('png')
-        ->size(800)
-        ->margin(2)
-        ->errorCorrection('H')
-        ->generate(url('/tamu'));
-    
-    return response($qrCode, 200, [
-        'Content-Type' => 'image/png',
-        'Content-Disposition' => 'attachment; filename="qr-code-buku-tamu-prm-wg.png"',
-    ]);
-})->name('guest.qr.download');
