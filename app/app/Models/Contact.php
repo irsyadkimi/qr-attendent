@@ -17,13 +17,16 @@ class Contact extends Model
         'organization_name',
         'organization_type',
         'position',
+        'address',
         'notes',
+        'is_member',
         'is_active',
     ];
 
     protected function casts(): array
     {
         return [
+            'is_member' => 'boolean',
             'is_active' => 'boolean',
         ];
     }
