@@ -1,56 +1,43 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use App\Models\Event;
-use App\Models\Attendance;
+use App\Models\Contact;
+use App\Models\EventParticipant;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
-class PublicEventController extends Controller
-{
-    public function show($event_code)
-    {
-        $event = Event::where('event_code', $event_code)->firstOrFail();
-        return view('public.event-checkin', compact('event'));
+class PublicEventController extends Controller {
+    public function checkPhone(Request $request) {
+        $contact = Contact::where('phone', $request->phone)->first();
+        if ($contact) {
+            return response()->json([
+                'status' => 'found',
+                'name' => $contact->name,
+                'address' => $contact->address
+            ]);
+        }
+        return response()->json(['status' => 'not_found']);
     }
 
-    public function store(Request $request, $event_code)
-    {
-        $event = Event::where('event_code', $event_code)->firstOrFail();
-
-        $validated = $request->validate([
-            'event_participant_id' => 'nullable|exists:event_participants,id',
-            'manual_name' => 'required_without:event_participant_id|string|max:255',
-            'manual_phone' => 'required_without:event_participant_id|string|max:20',
-            'manual_origin' => 'nullable|string|max:255',
-            'manual_org_type' => 'nullable|string|max:50',
-            'manual_org_name' => 'nullable|string|max:255',
-            'group_count' => 'nullable|integer|min:1',
+    public function store(Request $request, Event $event) {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'phone' => 'required|string|max:20',
+            'address' => 'required|string',
         ]);
 
-        try {
-            $attendance = Attendance::create([
-                'event_id' => $event->id,
-                'event_participant_id' => $validated['event_participant_id'] ?? null,
-                'manual_name' => $validated['manual_name'] ?? null,
-                'manual_phone' => $validated['manual_phone'] ?? null,
-                'manual_origin' => $validated['manual_origin'] ?? null,
-                'manual_org_type' => $validated['manual_org_type'] ?? null,
-                'manual_org_name' => $validated['manual_org_name'] ?? null,
-                'group_count' => $validated['group_count'] ?? null,
-                'checked_in_at' => now(),
-            ]);
+        $contact = Contact::firstOrCreate(
+            ['phone' => $request->phone],
+            ['name' => $request->name, 'address' => $request->address, 'is_member' => false]
+        );
 
-            return redirect()->route('event.success', $event_code);
-        } catch (\Exception $e) {
-            return back()->with('error', 'Check-in gagal: ' . $e->getMessage());
-        }
-    }
+        EventParticipant::create([
+            'event_id' => $event->id,
+            'contact_id' => $contact->id,
+            'name' => $request->name,
+            'phone' => $request->phone,
+            'address' => $request->address,
+        ]);
 
-    public function success($event_code)
-    {
-        $event = Event::where('event_code', $event_code)->firstOrFail();
-        return view('public.event-success', compact('event'));
+        return redirect()->route('public.event.success', $event);
     }
 }
