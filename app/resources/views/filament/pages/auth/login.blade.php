@@ -11,7 +11,7 @@
         {{-- Header Besar PRM - BIRU --}}
         <div class="text-center mb-4 max-w-2xl">
             <h1 class="text-xl md:text-2xl font-bold text-sky-900 leading-tight">
-                PIMPINAN RANTING MUHAMMADIYAH WAGE
+                PIMPINAN RANTING MUHAMMADIYAH GEDANGAN
             </h1>
             <p class="text-base md:text-lg font-semibold text-sky-800 mt-1">
                 CABANG SEPANJANG DAERAH SIDOARJO
@@ -37,6 +37,6 @@
     <div class="mt-6 text-center text-xs text-gray-500">
         <p class="mb-1">Dikembangkan oleh</p>
         <p class="font-semibold text-sky-700">ICMI</p>
-        <p class="mt-2">© {{ date('Y') }} PRM Wage Muhammadiyah</p>
+        <p class="mt-2">© {{ date('Y') }} PRM Gedangan Muhammadiyah</p>
     </div>
 </x-filament-panels::page.simple>

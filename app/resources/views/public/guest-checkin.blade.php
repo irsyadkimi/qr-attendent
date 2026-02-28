@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Buku Tamu PRM WG</title>
+    <title>Buku Tamu PRM Gedangan</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gradient-to-br from-sky-50 to-blue-100 min-h-screen">
@@ -20,7 +20,7 @@
                 
                 <div class="mb-4">
                     <h1 class="text-lg md:text-xl font-bold text-sky-900 leading-tight">
-                        PIMPINAN RANTING MUHAMMADIYAH WAGE
+                        PIMPINAN RANTING MUHAMMADIYAH GEDANGAN
                     </h1>
                     <p class="text-sm md:text-base font-semibold text-sky-800">
                         CABANG SEPANJANG DAERAH SIDOARJO
